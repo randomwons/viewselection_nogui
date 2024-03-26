@@ -32,10 +32,7 @@ py::array_t<double> VoxelGrid::occlusion_aware_face(int32_t height, int32_t widt
                 Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
-            if(sample.is_over()){
-                values[i] = 0;
-                break;
-            }
+            if(sample.is_over()) break;
         }
         values[i] = total_Iv;
     }
@@ -78,10 +75,7 @@ py::array_t<double> VoxelGrid::unobserved_voxel_face(int32_t height, int32_t wid
                 Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
-            if(sample.is_over()){
-                values[i] = 0;
-                break;
-            }
+            if(sample.is_over()) break;
         }
         values[i] = total_Ik;
     }
@@ -120,10 +114,7 @@ py::array_t<double> VoxelGrid::rear_side_voxel_face(int32_t height, int32_t widt
 
             }
             sample.one_step();
-            if(sample.is_over()){
-                values[i] = 0;
-                break;
-            }
+            if(sample.is_over()) break;
         }
         values[i] = total_Ib;
     }
@@ -168,10 +159,7 @@ py::array_t<double> VoxelGrid::rear_side_entropy_face(int32_t height, int32_t wi
                 Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
-            if(sample.is_over()){
-                values[i] = 0;
-                break;
-            }
+            if(sample.is_over()) break;
         }
         values[i] = total_In;
     }
@@ -212,9 +200,7 @@ py::array_t<double> VoxelGrid::krigel_face(int32_t height, int32_t width,
             
             }
             sample.one_step();
-            if(sample.is_over()){
-                values[i] = 0;
-            }
+            if(sample.is_over()) break;
         }
         values[i] = n_traversed != 0 ? total_Ie / n_traversed : 0;
     }
