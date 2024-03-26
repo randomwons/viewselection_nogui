@@ -3,9 +3,7 @@ from .config import *
 from DirectionVoxelGrid import VoxelGrid
 
 import numpy as np
-import open3d as o3d
 import cv2
-import matplotlib.pyplot as plt
 
 class PyVoxelGrid(VoxelGrid):
     def __init__(self, voxel_bnds, voxel_size):
