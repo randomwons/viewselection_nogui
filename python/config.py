@@ -5,6 +5,7 @@ import sys
 ## Import cpp pybind modules
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path += [os.path.dirname(pyd) for pyd in glob.iglob(os.path.join(ROOT_DIR, "build*", "**/*.pyd"), recursive=True)]
+sys.path += [os.path.dirname(pyd) for pyd in glob.iglob(os.path.join(ROOT_DIR, "build*", "**/*.so"), recursive=True)]
 
 ## COMMON VALUES
 
