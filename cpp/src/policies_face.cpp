@@ -29,7 +29,7 @@ py::array_t<double> VoxelGrid::occlusion_aware_face(int32_t height, int32_t widt
 
                 if(curVoxel.face[sample.get_cur_face()] >= L_OCCUPIED) break;;
 
-                Po_xi *= (1 - Po_xi);
+                Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
             if(sample.is_over()){
@@ -75,7 +75,7 @@ py::array_t<double> VoxelGrid::unobserved_voxel_face(int32_t height, int32_t wid
 
                 if(L >= L_OCCUPIED) break;;
 
-                Po_xi *= (1 - Po_xi);
+                Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
             if(sample.is_over()){
@@ -165,7 +165,7 @@ py::array_t<double> VoxelGrid::rear_side_entropy_face(int32_t height, int32_t wi
                 }
 
                 previous_L = L;
-                Po_xi *= (1 - Po_xi);
+                Pv_xi *= (1 - Po_xi);
             }
             sample.one_step();
             if(sample.is_over()){
