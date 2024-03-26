@@ -40,7 +40,7 @@ def compute_chamfer_distance(pcd1, pcd2):
     
 #     return len(unique_assigned_gt_indices) / len(gt_points)
  
-def compute_surface_coverage(gt_cloud, compare_cloud, threshold=0.005):
+def compute_surface_coverage(gt_points, compare_points, threshold=0.005):
     """
     Args:
         gt_cloud : o3d.geometry.PointCloud
@@ -50,11 +50,6 @@ def compute_surface_coverage(gt_cloud, compare_cloud, threshold=0.005):
         surface_coverage : float
     """
     
-    gt_points = np.asarray(gt_cloud.points)
-
-    compare_points = np.asarray(compare_cloud.points)
-
-    # compare_tree = cKDTree(compare_points)
     compare_tree = KDTree(compare_points)
     
     distance, indices = compare_tree.query(gt_points, distance_upper_bound=threshold)

@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import open3d as o3d
 import glob
 import os
 
@@ -47,12 +46,7 @@ def run(args):
     pointcloud_path_list = glob.glob(os.path.join(datapath, "pointcloud", "*.npy"))
     print(f"Number of images : color {len(color_image_path_list)}, depth {len(depth_image_path_list)}")
  
-    ## Load model   
-    model = o3d.io.read_triangle_mesh(modelpath)
-    model = fit_model_aabb_size(model, MODEL_SIZE)
- 
-    ## Groundtruth pointcloud   
-    model_gt_pcd = model.sample_points_uniformly(NUMBER_MODEL_SAMPLE_POINTS)
+    model_gt_pcd = np.load(os.path.join(datapath, f"pcd_gt_{NUMBER_MODEL_SAMPLE_POINTS}.npy"))
     
     ## VoxelGrid initilaize
     voxelgrid = PyVoxelGrid(VOXEL_BNDS, VOXEL_SIZE)
@@ -60,7 +54,7 @@ def run(args):
     close = False
     
     SELECT = INITIAL_IMAEG_NUM
-    pcd_compare = o3d.geometry.PointCloud()
+    pcd_compare = None
     for n in range(MAX_ITERATE):
         
         color = cv2.imread(color_image_path_list[SELECT])
@@ -68,7 +62,7 @@ def run(args):
         pose = np.loadtxt(pose_path_list[SELECT])
         intrinsic = np.loadtxt(intrinsic_path_list[SELECT])
         pointcloud = np.load(pointcloud_path_list[SELECT])
-        
+        print(pointcloud.shape)
         image, value = voxelgrid.get_policies(policy, color.shape[0], color.shape[1],
                                                   intrinsic, np.linalg.inv(pose))
         
@@ -81,9 +75,10 @@ def run(args):
         intrinsic_path_list.pop(SELECT)
         pointcloud_path_list.pop(SELECT)
         
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(pointcloud)
-        pcd_compare += pcd
+        if pcd_compare is None:
+            pcd_compare = pointcloud
+        else:
+            pcd_compare = np.vstack([pcd_compare, pointcloud])
         
         surface_coverage = compute_surface_coverage(model_gt_pcd, pcd_compare, threshold=SURFACE_THRESHOLD)
         surface_coverages.append(surface_coverage)
